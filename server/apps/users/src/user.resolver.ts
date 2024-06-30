@@ -11,16 +11,20 @@ import { User } from './entities/user.entities';
 export class UserResolver {
   constructor(private readonly usersService: UsersService) {}
 
+  // register
   @Mutation(() => RegisterResponse)
   async register(
     @Args('registerDto') registerDto: RegisterDto,
     @Context() context: { res: Response },
-  ) {
+  ): Promise<RegisterResponse> {
     if (!registerDto.name || !registerDto.email || !registerDto.password) {
       throw new BadRequestException('Please fill all the fields');
     }
-    const user = await this.usersService.register(registerDto, context.res);
-    return user;
+    const { activation_token } = await this.usersService.register(
+      registerDto,
+      context.res,
+    );
+    return { activation_token };
   }
 
   @Query(() => [User])

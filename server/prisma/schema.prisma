@@ -30,7 +30,7 @@ model User {
   id String  @id @default(auto()) @map("_id") @db.ObjectId
   name String
   email String @unique
-  phone_number Float?
+  phone_number Float? @unique
   address String?
   password String
   avatar Avatars?
@@ -38,19 +38,19 @@ model User {
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
 
-  @@unique([email,phone_number], name: "unique_email_phone_number")
+  // @@unique([email,phone_number], name: "unique_email_phone_number")
 }
 
-model Restaurant {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  country String
-  city String
-  address String
-  email String @unique
-  phone_number Float @unique
-  password String
-  creatAt DateTime @default(now())
-  updateAt DateTime @updatedAt
-}
+// model Restaurant {
+//   id String @id @default(auto()) @map("_id") @db.ObjectId
+//   name String
+//   country String
+//   city String
+//   address String
+//   email String @unique
+//   phone_number Float @unique
+//   password String
+//   creatAt DateTime @default(now())
+//   updateAt DateTime @updatedAt
+// }
  
