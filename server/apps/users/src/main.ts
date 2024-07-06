@@ -1,11 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { UsersModule } from './users.module';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join, resolve } from 'path';
+import { ConfigService } from '@nestjs/config';
+import { config } from 'process';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(UsersModule);
+  const logger = new Logger();
   app.useGlobalPipes(new ValidationPipe());
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
@@ -17,6 +20,10 @@ async function bootstrap() {
     origin: '*',
   });
 
-  await app.listen(4001);
+  const configService = app.get<ConfigService>(ConfigService);
+  await app.listen(configService.get<string>('PORT'), async () => {
+    const url = await app.getUrl();
+    logger.log('Auth Server is running on ' + url);
+  });
 }
 bootstrap();
