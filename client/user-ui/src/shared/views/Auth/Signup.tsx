@@ -1,8 +1,11 @@
 import { styles } from "@/constants";
+import { REGISTER_USER } from "@/graphql/actions/user.actions";
+import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { error } from "console";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import {
   AiFillGithub,
   AiOutlineEye,
@@ -35,18 +38,31 @@ const Signup = ({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<SignupSchema>({
     resolver: zodResolver(formSchema),
   });
+  const [registerUserMutation, { loading }] =
+    useMutation(REGISTER_USER);
 
-  const onSubmit = (data: SignupSchema) => {
-    const signupData = {
-      name: data.name,
-      email: data.email,
-      phone_number: data.phone_number,
-      password: data.password,
-    };
-    console.log(signupData);
+  const onSubmit = async (data: SignupSchema) => {
+    try {
+      const response = await registerUserMutation({
+        variables: data,
+      });
+      console.log(response);
+      localStorage.setItem(
+        "activation_token",
+        response.data.activation_token
+      );
+      toast.success(
+        "Please check your email to activate your account!"
+      );
+      reset();
+      setActivateState("Verification");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
   const [show, setShow] = useState(false);
 

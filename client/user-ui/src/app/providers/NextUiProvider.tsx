@@ -1,3 +1,6 @@
+"use client";
+import { graphqlClient } from "@/graphql/gql.setup";
+import { ApolloProvider } from "@apollo/client";
 import { NextUIProvider } from "@nextui-org/react";
 import React from "react";
 
@@ -6,5 +9,9 @@ export function Providers({
 }: {
   children: React.ReactNode;
 }) {
-  return <NextUIProvider>{children}</NextUIProvider>;
+  return (
+    <ApolloProvider client={graphqlClient}>
+      <NextUIProvider>{children}</NextUIProvider>
+    </ApolloProvider>
+  );
 }
