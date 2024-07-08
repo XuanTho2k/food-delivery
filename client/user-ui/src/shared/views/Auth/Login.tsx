@@ -1,8 +1,14 @@
 import { styles } from "@/constants";
 import React, { useState } from "react";
-import { AiOutlineEyeInvisible } from "react-icons/ai";
+import {
+  AiFillWallet,
+  AiOutlineEyeInvisible,
+} from "react-icons/ai";
 import { AiOutlineEye } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 const Login = ({
   setActivateState,
   setOpen,
@@ -11,21 +17,53 @@ const Login = ({
   setOpen: (e: boolean) => void;
 }) => {
   const [show, setShow] = useState(false);
+
+  // const [Login,{loading}] = useMutation
+
+  const formSchema = z.object({
+    email: z.string().email(),
+    password: z
+      .string()
+      .min(
+        8,
+        "Password must be at least 8 characters long!"
+      ),
+  });
+  type LoginSchema = z.infer<typeof formSchema>;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(formSchema),
+  });
+  const onSubmit = async (data: LoginSchema) => {
+    const loginData = {
+      email: data.email,
+      password: data.password,
+    };
+    // console.log(loginData);
+  };
   return (
     <div>
       <h1 className={`${styles.title}`}>
         {" "}
         Login with Chow Chow Choo
       </h1>
-      <form action="">
+      <form action="" onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor=""> Enter your Email</label>
         <input
-          type="text"
+          type="email"
+          {...register("email")}
           placeholder="loginmail@gmail.com"
           className={`${styles.input}`}
-          name=""
-          id=""
         />
+        {errors.email && (
+          <span className="text-red-500 block mt-1">
+            {`${errors.email.message}`}
+          </span>
+        )}
         <div className="w-full mt-5 relative mb-1">
           <label
             htmlFor="password"
@@ -34,6 +72,7 @@ const Login = ({
             Enter your password
           </label>
           <input
+            {...register("password")}
             type={!show ? "password" : "text"}
             placeholder="password!@%"
             className={`${styles.input}`}
@@ -52,6 +91,11 @@ const Login = ({
             />
           )}
         </div>
+        {errors.password && (
+          <span className="text-red-500 mt-1 block">
+            {`${errors.password.message}`}
+          </span>
+        )}
         <div className="w-full mt-5">
           <span
             className={`${styles.label} text-[#2190ff] block text-right cursor-pointer`}
@@ -65,6 +109,7 @@ const Login = ({
             type="submit"
             value="Login"
             className={`${styles.button} mt-3`}
+            disabled={isSubmitting}
           />
         </div>
         <br />
