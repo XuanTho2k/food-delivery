@@ -8,8 +8,6 @@ import { ConfigService } from '@nestjs/config';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../../../prisma/Prisma.service';
-import * as exp from 'constants';
-import { LocalGraphQLDataSource } from '@apollo/gateway';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -25,22 +23,19 @@ export class AuthGuard implements CanActivate {
 
     const accessToken = req.headers.accesstoken as string;
     const refreshToken = req.headers.refreshtoken as string;
+    console.log(accessToken, refreshToken);
 
     if (!accessToken || !refreshToken) {
       throw new UnauthorizedException('Please login to access this resource!');
     }
     if (accessToken) {
-      const decoded = this.jwt.verify(accessToken, {
-        secret: this.config.get<string>('ACCESS_TOKEN_SECRET'),
-      });
+      // const decoded = this.jwt.verify(accessToken, {
+      //   secret: this.config.get<string>('ACCESS_TOKEN_SECRET'),
+      // });
+      const decoded = this.jwt.decode(accessToken);
       const expirationTime = decoded?.exp * 1000;
-
-      console.log(expirationTime - Date.now());
       if (expirationTime < Date.now()) {
         await this.updateAccessToken(req);
-        console.log('object2');
-      } else {
-        console.log('object');
       }
     }
 
@@ -51,9 +46,10 @@ export class AuthGuard implements CanActivate {
     try {
       const refreshTokenData = req.headers.refreshtoken as string;
 
-      const decoded = this.jwt.verify(refreshTokenData, {
-        secret: this.config.get<string>('REFRESH_TOKEN_SECRET'),
-      });
+      // const decoded = this.jwt.verify(refreshTokenData, {
+      //   secret: this.config.get<string>('REFRESH_TOKEN_SECRET'),
+      // });
+      const decoded = this.jwt.decode(refreshTokenData);
 
       const expirationTime = decoded.exp * 1000;
 
