@@ -3,6 +3,7 @@ import { ACTIVATE_USER } from "@/graphql/actions/user.actions";
 import { useMutation } from "@apollo/client";
 import { input } from "@nextui-org/react";
 import React, { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
 
 type VerifyNumber = {
@@ -34,6 +35,49 @@ const Verification = ({
       2: "",
       3: "",
     });
+  const verificationHandle = async () => {
+    const verificationNumber =
+      Object.values(verifyNumber).join("");
+    const activationToken = localStorage.getItem(
+      "activation_token"
+    );
+
+    if (verificationNumber.length !== 4) {
+      setInvalidError(true);
+      return;
+    } else {
+      const data = {
+        activationToken,
+        activationCode: verificationNumber,
+      };
+      console.log(data);
+
+      try {
+        await ActivateUser({ variables: data });
+        localStorage.removeItem("activation_token");
+        toast.success("Account activated successfully!");
+        setActivateState("Login");
+      } catch (error: any) {
+        toast.error(error.message);
+      }
+    }
+  };
+  const handleInputChange = (
+    idx: number,
+    value: string
+  ) => {
+    setInvalidError(false);
+    const newVerifyNumber = {
+      ...verifyNumber,
+      [idx]: value,
+    };
+    setVerifyNumber(newVerifyNumber);
+    if (value === "" && idx > 0) {
+      inputRefs[idx - 1].current?.focus();
+    } else if (value.length == 1 && idx < 3) {
+      inputRefs[idx + 1].current?.focus();
+    }
+  };
   return (
     <div>
       <h1 className={`${styles.title}`}>
@@ -61,6 +105,9 @@ const Verification = ({
             maxLength={1}
             placeholder=""
             value={verifyNumber[key as keyof VerifyNumber]}
+            onChange={(e) =>
+              handleInputChange(idx, e.target.value)
+            }
           />
         ))}
       </div>
@@ -70,6 +117,7 @@ const Verification = ({
         <button
           className={`${styles.button}`}
           disabled={loading}
+          onClick={verificationHandle}
         >
           Verify OTP
         </button>

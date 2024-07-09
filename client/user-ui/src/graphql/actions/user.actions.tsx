@@ -3,7 +3,7 @@
 import { gql, DocumentNode } from "@apollo/client";
 
 export const LOGIN_USER: DocumentNode = gql`
-  mutation LoginUser($email: String!, $password: String) {
+  mutation LoginUser($email: String!, $password: String!) {
     Login(email: $email, password: $password) {
       user {
         id
@@ -57,7 +57,7 @@ export const ACTIVATE_USER: DocumentNode = gql`
         name
         email
         phone_number
-        createdAt
+        createAt
       }
     }
   }

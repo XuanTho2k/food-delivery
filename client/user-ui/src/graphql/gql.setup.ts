@@ -22,5 +22,6 @@ const authMiddleWare = new ApolloLink(
 );
 export const graphqlClient = new ApolloClient({
   link: authMiddleWare.concat(httpLink),
+  // uri: process.env.NEXT_PUBLIC_SERVER_URI,
   cache: new InMemoryCache(),
 });

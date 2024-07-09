@@ -50,10 +50,10 @@ const Signup = ({
       const response = await registerUserMutation({
         variables: data,
       });
-      console.log(response);
+
       localStorage.setItem(
         "activation_token",
-        response.data.activation_token
+        response.data.register.activation_token
       );
       toast.success(
         "Please check your email to activate your account!"

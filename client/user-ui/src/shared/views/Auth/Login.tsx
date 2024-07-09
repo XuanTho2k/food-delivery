@@ -4,11 +4,15 @@ import {
   AiFillWallet,
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
+import Cookies from "js-cookie";
 import { AiOutlineEye } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@apollo/client";
+import { LOGIN_USER } from "@/graphql/actions/user.actions";
+import toast from "react-hot-toast";
 const Login = ({
   setActivateState,
   setOpen,
@@ -18,7 +22,7 @@ const Login = ({
 }) => {
   const [show, setShow] = useState(false);
 
-  // const [Login,{loading}] = useMutation
+  const [Login, { loading }] = useMutation(LOGIN_USER);
 
   const formSchema = z.object({
     email: z.string().email(),
@@ -43,7 +47,16 @@ const Login = ({
       email: data.email,
       password: data.password,
     };
-    // console.log(loginData);
+    const response = await Login({ variables: loginData });
+    toast.success("Login Successfully!");
+    Cookies.set(
+      "refresh_token",
+      response.data.Login.refreshToken
+    );
+    Cookies.set(
+      "refresh_token",
+      response.data.Login.refreshToken
+    );
   };
   return (
     <div>
