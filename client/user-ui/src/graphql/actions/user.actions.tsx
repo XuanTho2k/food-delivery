@@ -93,3 +93,25 @@ export const LOGOUT_USER: DocumentNode = gql`
     }
   }
 `;
+
+export const RESET_PW: DocumentNode = gql`
+  mutation ResetPassword(
+    $password: String!
+    $activationToken: String!
+  ) {
+    resetPassword(
+      resetPasswordDto: {
+        password: $password
+        activationToken: $activationToken
+      }
+    ) {
+      user {
+        id
+        name
+        email
+        role
+        password
+      }
+    }
+  }
+`;

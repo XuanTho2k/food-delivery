@@ -40,7 +40,6 @@ const ForgotPassword = ({
       toast.success(
         "Please check your email to reset your password!"
       );
-      reset();
     } catch (error: any) {
       toast.error(error.message);
     }

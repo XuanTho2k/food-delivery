@@ -28,7 +28,6 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Please login to access this resource!');
     }
 
-    console.log(accessToken);
     if (accessToken) {
       // const decoded = this.jwt.verify(accessToken, {
       //   secret: this.config.get<string>('ACCESS_TOKEN_SECRET'),
@@ -66,8 +65,6 @@ export class AuthGuard implements CanActivate {
           req.user = user;
         }
       }
-    } else {
-      console.log('object');
     }
     return true;
   }

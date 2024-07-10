@@ -21,7 +21,6 @@ const ProfileDropDown = () => {
   const [signedIn, setSignedIn] = useState(false);
   const { user, loading } = useUser();
 
-  console.log(user);
   // const [logOutUser, { loading: load }] =
   //   useQuery(LOGOUT_USER);
 

@@ -1,5 +1,10 @@
 import { Response } from 'express';
-import { ActivationDto, ForgotPasswordDto, RegisterDto } from './dto/user.dto';
+import {
+  ActivationDto,
+  ForgotPasswordDto,
+  RegisterDto,
+  ResetPasswordDto,
+} from './dto/user.dto';
 import {
   ActivationResponse,
   ForgotPasswordResponse,
@@ -74,5 +79,12 @@ export class UserResolver {
     @Args('forgotPasswordDto') forgotPasswordDto: ForgotPasswordDto,
   ): Promise<ForgotPasswordResponse> {
     return await this.usersService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Mutation(() => ResetPasswordResponse)
+  async resetPassword(
+    @Args('resetPasswordDto') resetPasswordDto: ResetPasswordDto,
+  ): Promise<ResetPasswordResponse> {
+    return this.usersService.resetPassword(resetPasswordDto);
   }
 }
