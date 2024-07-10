@@ -1,5 +1,6 @@
 import { styles } from "@/constants";
 import { REGISTER_USER } from "@/graphql/actions/user.actions";
+import Loading from "@/shared/components/common/LoadingPage/Loading";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { error } from "console";
@@ -66,7 +67,7 @@ const Signup = ({
   };
   const [show, setShow] = useState(false);
 
-  return (
+  return !loading ? (
     <div>
       <h1 className={`${styles.title}`}>
         SignUp with Chow Chow Choo
@@ -182,6 +183,8 @@ const Signup = ({
         </h5>
       </form>
     </div>
+  ) : (
+    <Loading />
   );
 };
 

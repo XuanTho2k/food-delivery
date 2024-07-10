@@ -1,7 +1,11 @@
 import { styles } from "@/constants";
+import { FORGOT_PW } from "@/graphql/actions/user.actions";
+import Loading from "@/shared/components/common/LoadingPage/Loading";
+import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { z } from "zod";
 
 const ForgotPassword = ({
@@ -9,10 +13,15 @@ const ForgotPassword = ({
 }: {
   setActivateState: (e: string) => void;
 }) => {
+  const [forgotPassword, { loading }] =
+    useMutation(FORGOT_PW);
+
   const formSchema = z.object({
     email: z.string().email(),
   });
+
   type ForgotPwSchema = z.infer<typeof formSchema>;
+
   const {
     register,
     handleSubmit,
@@ -21,12 +30,24 @@ const ForgotPassword = ({
   } = useForm<ForgotPwSchema>({
     resolver: zodResolver(formSchema),
   });
-  const onSubmit = (data: ForgotPwSchema) => {
-    const forgotPwData = data.email;
-
-    console.log(forgotPwData);
+  const onSubmit = async (data: ForgotPwSchema) => {
+    try {
+      const response = await forgotPassword({
+        variables: {
+          email: data.email,
+        },
+      });
+      toast.success(
+        "Please check your email to reset your password!"
+      );
+      reset();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <div>
       <h1 className={`${styles.title}`}>
         Forgot your password?

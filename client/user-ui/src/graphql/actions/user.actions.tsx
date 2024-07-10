@@ -62,3 +62,34 @@ export const ACTIVATE_USER: DocumentNode = gql`
     }
   }
 `;
+
+export const GET_USER: DocumentNode = gql`
+  query {
+    getLoggedInUser {
+      user {
+        id
+        name
+        email
+        address
+        password
+      }
+      accessToken
+      refreshToken
+    }
+  }
+`;
+
+export const FORGOT_PW: DocumentNode = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(forgotPasswordDto: { email: $email }) {
+      message
+    }
+  }
+`;
+export const LOGOUT_USER: DocumentNode = gql`
+  query {
+    logOutUser {
+      message
+    }
+  }
+`;

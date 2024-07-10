@@ -1,9 +1,6 @@
 import { styles } from "@/constants";
 import React, { useState } from "react";
-import {
-  AiFillWallet,
-  AiOutlineEyeInvisible,
-} from "react-icons/ai";
+import { AiOutlineEyeInvisible } from "react-icons/ai";
 import Cookies from "js-cookie";
 import { AiOutlineEye } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
@@ -13,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "@/graphql/actions/user.actions";
 import toast from "react-hot-toast";
+import Loading from "@/shared/components/common/LoadingPage/Loading";
 const Login = ({
   setActivateState,
   setOpen,
@@ -23,6 +21,7 @@ const Login = ({
   const [show, setShow] = useState(false);
 
   const [Login, { loading }] = useMutation(LOGIN_USER);
+  console.log(loading);
 
   const formSchema = z.object({
     email: z.string().email(),
@@ -48,17 +47,24 @@ const Login = ({
       password: data.password,
     };
     const response = await Login({ variables: loginData });
-    toast.success("Login Successfully!");
-    Cookies.set(
-      "refresh_token",
-      response.data.Login.refreshToken
-    );
-    Cookies.set(
-      "refresh_token",
-      response.data.Login.refreshToken
-    );
+    if (response.data.Login.user) {
+      toast.success("Login Successfully!");
+      Cookies.set(
+        "access_token",
+        response.data.Login.accessToken
+      );
+      Cookies.set(
+        "refresh_token",
+        response.data.Login.refreshToken
+      );
+      setOpen(false);
+      reset();
+      window.location.reload();
+    } else {
+      toast.error(response.data.Login.error.message);
+    }
   };
-  return (
+  return !loading ? (
     <div>
       <h1 className={`${styles.title}`}>
         {" "}
@@ -150,6 +156,8 @@ const Login = ({
         </h5>
       </form>
     </div>
+  ) : (
+    <Loading />
   );
 };
 

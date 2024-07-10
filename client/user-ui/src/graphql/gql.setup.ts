@@ -14,7 +14,7 @@ const authMiddleWare = new ApolloLink(
     operation.setContext({
       headers: {
         accesstoken: Cookies.get("access_token"),
-        refreshtoken: Cookies.get("refresh"),
+        refreshtoken: Cookies.get("refresh_token"),
       },
     });
     return forward(operation);
@@ -22,6 +22,5 @@ const authMiddleWare = new ApolloLink(
 );
 export const graphqlClient = new ApolloClient({
   link: authMiddleWare.concat(httpLink),
-  // uri: process.env.NEXT_PUBLIC_SERVER_URI,
   cache: new InMemoryCache(),
 });

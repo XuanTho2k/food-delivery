@@ -23,22 +23,52 @@ export class AuthGuard implements CanActivate {
 
     const accessToken = req.headers.accesstoken as string;
     const refreshToken = req.headers.refreshtoken as string;
-    console.log(accessToken, refreshToken);
 
     if (!accessToken || !refreshToken) {
       throw new UnauthorizedException('Please login to access this resource!');
     }
+
+    console.log(accessToken);
     if (accessToken) {
       // const decoded = this.jwt.verify(accessToken, {
       //   secret: this.config.get<string>('ACCESS_TOKEN_SECRET'),
       // });
       const decoded = this.jwt.decode(accessToken);
-      const expirationTime = decoded?.exp * 1000;
-      if (expirationTime < Date.now()) {
-        await this.updateAccessToken(req);
-      }
-    }
+      if (decoded) {
+        const expirationTime = decoded?.exp * 1000;
+        if (expirationTime < Date.now()) {
+          await this.updateAccessToken(req);
+        } else {
+          const user = await this.prisma.user.findUnique({
+            where: {
+              id: decoded.id,
+            },
+          });
+          const accessToken = this.jwt.sign(
+            {
+              id: user.id,
+            },
+            {
+              secret: this.config.get<string>('ACCESS_TOKEN_SECRET'),
+              expiresIn: '5m',
+            },
+          );
+          const refreshToken = this.jwt.sign(
+            { id: user.id },
+            {
+              secret: this.config.get<string>('REFRESH_TOKEN_SECRET'),
+              expiresIn: '7d',
+            },
+          );
 
+          req.accessToken = accessToken;
+          req.refreshToken = refreshToken;
+          req.user = user;
+        }
+      }
+    } else {
+      console.log('object');
+    }
     return true;
   }
 
