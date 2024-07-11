@@ -11,12 +11,10 @@ describe('RestaurantsController', () => {
       providers: [RestaurantsService],
     }).compile();
 
-    restaurantsController = app.get<RestaurantsController>(RestaurantsController);
+    restaurantsController = app.get<RestaurantsController>(
+      RestaurantsController,
+    );
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(restaurantsController.getHello()).toBe('Hello World!');
-    });
-  });
+  describe('root', () => {});
 });

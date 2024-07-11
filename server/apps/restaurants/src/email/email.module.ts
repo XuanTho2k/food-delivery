@@ -1,9 +1,10 @@
-import { Global, Module } from '@nestjs/common';
-import { EmailService } from './email.service';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
+import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
-import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
+import { EmailService } from './email.service';
+
 @Global()
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
       useFactory: async (config: ConfigService) => ({
         transport: {
           host: config.get('SMTP_HOST'),
+          secure: true,
           auth: {
             user: config.get('SMTP_MAIL'),
             pass: config.get('SMTP_PASSWORD'),
@@ -20,7 +22,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
           from: 'Chow Chow Choo',
         },
         template: {
-          dir: join(process.cwd(), 'apps/users/email-templates'),
+          dir: join(process.cwd(), 'apps/restaurants/email-templates'),
           adapter: new EjsAdapter(),
           options: {
             strict: false,
@@ -31,5 +33,6 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
     }),
   ],
   providers: [EmailService],
+  exports: [EmailService],
 })
 export class EmailModule {}

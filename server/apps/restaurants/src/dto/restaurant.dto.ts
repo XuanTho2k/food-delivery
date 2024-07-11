@@ -30,21 +30,21 @@ export class RegisterDto {
 
   @Field()
   @IsNotEmpty({ message: ' Restaurant Phone Number is required.' })
-  phone_number: string;
+  phone_number: number;
 
   @Field()
   @IsNotEmpty({ message: 'Restaurant Password is required.' })
   @MinLength(8, {
     message: 'Restaurant Password must be at least 8 characters.',
   })
-  password: number;
+  password: string;
 }
 
 @InputType()
 export class ActivationDto {
   @Field()
   @IsNotEmpty({ message: 'Activation Token is required.' })
-  activationToken: string;
+  activation_token: string;
 }
 
 @InputType()
