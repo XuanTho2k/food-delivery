@@ -8,7 +8,7 @@ import {
 } from '@nestjs/apollo';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../../../prisma/Prisma.service';
+import { PrismaService } from '../prisma/Prisma.service';
 import { UserResolver } from './user.resolver';
 import { EmailModule } from './email/email.module';
 import { EmailService } from './email/email.service';
@@ -17,6 +17,7 @@ import { EmailService } from './email/email.service';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: './apps/users/.env',
     }),
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,

@@ -11,13 +11,21 @@
     "importHelpers": true,
     "target": "ES2015",
     "module": "ESNext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./apps/*"]
+      "@/*": [
+        "./apps/*"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

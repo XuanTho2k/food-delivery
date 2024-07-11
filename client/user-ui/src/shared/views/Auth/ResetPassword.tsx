@@ -1,43 +1,32 @@
+"use client";
 import { styles } from "@/constants";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
-import Cookies from "js-cookie";
 import { AiOutlineEye } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
-import {
-  LOGIN_USER,
-  RESET_PW,
-} from "@/graphql/actions/user.actions";
+import { RESET_PW } from "@/graphql/actions/user.actions";
 import toast from "react-hot-toast";
 import Loading from "@/shared/components/common/LoadingPage/Loading";
-const ResetPassword = ({
-  activationToken,
-}: {
-  activationToken: string | null;
-}) => {
-  const [show, setShow] = useState(false);
-  const [show2, setShow2] = useState(false);
+import { useSearchParams } from "next/navigation";
 
+const ResetPassword = () => {
+  const activationToken = useSearchParams().get("verify");
   const [showPw, setShowPw] = useState({
     pw1: false,
     pw2: false,
   });
 
-  const [ResetPassword, { loading }] =
-    useMutation(RESET_PW);
+  const [ResetPassword, { loading }] = useMutation(RESET_PW);
 
   const formSchema = z
     .object({
       password: z
         .string()
-        .min(
-          8,
-          "Password must be at least 8 characters long!"
-        ),
+        .min(8, "Password must be at least 8 characters long!"),
       confirmPassword: z.string(),
     })
     .refine(
@@ -71,19 +60,14 @@ const ResetPassword = ({
       toast.error(error.message);
     }
   };
-  return !loading ? (
+  if (loading) return <Loading />;
+  return (
     <div className="w-full flex justify-center items-center h-screen bg-slate-900 ">
       <div className="md:w-[500px]">
-        <h1 className={`${styles.title}`}>
-          {" "}
-          Reset your Password
-        </h1>
+        <h1 className={`${styles.title}`}> Reset your Password</h1>
         <form action="" onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full mt-5 relative mb-1">
-            <label
-              htmlFor="password"
-              className={`${styles.label}`}
-            >
+            <label htmlFor="password" className={`${styles.label}`}>
               Enter your password
             </label>
             <input
@@ -122,17 +106,12 @@ const ResetPassword = ({
             )}
           </div>
           <div className="w-full mt-5 relative mb-1">
-            <label
-              htmlFor="confirmPassword"
-              className={`${styles.label}`}
-            >
+            <label htmlFor="confirmPassword" className={`${styles.label}`}>
               Enter your Confirm Password
             </label>
             <input
               {...register("confirmPassword")}
-              type={
-                !showPw.pw2 ? "confirmPassword" : "text"
-              }
+              type={!showPw.pw2 ? "confirmPassword" : "text"}
               placeholder="confirmPassword!@%"
               className={`${styles.input}`}
             />
@@ -186,10 +165,7 @@ const ResetPassword = ({
             className="flex items-center justify-center my-3"
             onClick={() => {}}
           >
-            <FcGoogle
-              size={30}
-              className="cursor-pointer mr-2"
-            />
+            <FcGoogle size={30} className="cursor-pointer mr-2" />
           </div>
           <h5 className="text-center pt-4 font-Poppins text-[14px]">
             Not have any account?
@@ -201,8 +177,6 @@ const ResetPassword = ({
         </form>
       </div>
     </div>
-  ) : (
-    <Loading />
   );
 };
 

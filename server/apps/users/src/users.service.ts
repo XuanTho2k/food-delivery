@@ -9,7 +9,7 @@ import {
   ResetPasswordDto,
 } from './dto/user.dto';
 import { Response } from 'express';
-import { PrismaService } from '../../../prisma/Prisma.service';
+import { PrismaService } from '../prisma/Prisma.service';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from './email/email.service';
 import { TokenSender } from './utils/sendTokens';

@@ -3,7 +3,12 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
-    "assets": [{ "include": "**/*.{ejs}", "outDir": "dist" }],
+    "assets": [
+      {
+        "include": "**/*.{ejs}",
+        "outDir": "dist"
+      }
+    ],
     "deleteOutDir": true,
     "webpack": true,
     "tsConfigPath": "apps/gateway/tsconfig.app.json",
@@ -28,6 +33,15 @@
       "sourceRoot": "apps/users/src",
       "compilerOptions": {
         "tsConfigPath": "apps/users/tsconfig.app.json"
+      }
+    },
+    "restaurants": {
+      "type": "application",
+      "root": "apps/restaurants",
+      "entryFile": "main",
+      "sourceRoot": "apps/restaurants/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/restaurants/tsconfig.app.json"
       }
     }
   }

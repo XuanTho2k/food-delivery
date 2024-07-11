@@ -9,6 +9,12 @@
 # testing
 /coverage
 
+# env
+.env
+
+# Docker
+Dockerfile
+
 # next.js
 /.next/
 /out/
