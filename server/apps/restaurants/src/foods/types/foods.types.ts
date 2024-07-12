@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { ErrorType } from '../../types/restaurant.type';
+import { RestaurantErrorType } from '../../types/restaurant.type';
 import { Food } from '../entities/foods.entities';
 import { Foods } from '@/restaurants/prisma/generated/client';
 
@@ -8,8 +8,8 @@ export class CreateFoodResponse {
   @Field()
   message: string;
 
-  @Field(() => ErrorType, { nullable: true })
-  error?: ErrorType;
+  @Field(() => RestaurantErrorType, { nullable: true })
+  error?: RestaurantErrorType;
 }
 
 @ObjectType()
@@ -17,8 +17,8 @@ export class LoggedInRestaurantReponse {
   @Field(() => [Food], { nullable: true })
   foods: Foods;
 
-  @Field(() => ErrorType, { nullable: true })
-  error?: ErrorType;
+  @Field(() => RestaurantErrorType, { nullable: true })
+  error?: RestaurantErrorType;
 }
 
 @ObjectType()
@@ -26,6 +26,6 @@ export class DeleteFoodReponse {
   @Field()
   message: string;
 
-  @Field(() => ErrorType, { nullable: true })
-  error?: ErrorType;
+  @Field(() => RestaurantErrorType, { nullable: true })
+  error?: RestaurantErrorType;
 }

@@ -2,7 +2,7 @@ import { Directive, Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 @Directive('@key(fields:"id")')
-export class Avatars {
+export class RestaurantAvatars {
   @Field()
   id: string;
 
@@ -36,8 +36,8 @@ export class Restaurant {
   @Field()
   email: string;
 
-  @Field(() => Avatars, { nullable: true })
-  avatars?: Avatars | null;
+  @Field(() => RestaurantAvatars, { nullable: true })
+  avatars?: RestaurantAvatars | null;
 
   @Field()
   phone_number: number;

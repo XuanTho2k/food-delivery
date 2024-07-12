@@ -1,26 +1,29 @@
 import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
-import {
-  ActivationResponse,
-  LoginResponse,
-  LogoutResponse,
-  RegisterResponse,
-} from './types/restaurant.type';
-import { ActivationDto, RegisterDto } from './dto/restaurant.dto';
 import { Response } from 'express';
 import { RestaurantsService } from './restaurants.service';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from './guards/auth.guard';
+import {
+  RestaurantActivationDto,
+  RestaurantRegisterDto,
+} from './dto/restaurant.dto';
+import {
+  RestaurantActivationResponse,
+  RestaurantLoginResponse,
+  RestaurantLogoutResponse,
+  RestaurantRegisterResponse,
+} from './types/restaurant.type';
 
 @Resolver('Restaurant')
 export class RestaurantResolver {
   constructor(private readonly restaurantService: RestaurantsService) {}
 
   //   register restaurant
-  @Mutation(() => RegisterResponse)
+  @Mutation(() => RestaurantRegisterResponse)
   async registerRestaurant(
-    @Args('registerDto') registerDto: RegisterDto,
+    @Args('registerDto') registerDto: RestaurantRegisterDto,
     @Context() context: { res: Response },
-  ): Promise<RegisterResponse> {
+  ): Promise<RestaurantRegisterResponse> {
     const { message } = await this.restaurantService.registerRestaurant(
       registerDto,
       context.res,
@@ -29,11 +32,11 @@ export class RestaurantResolver {
   }
 
   //   activate restaurant
-  @Mutation(() => ActivationResponse)
+  @Mutation(() => RestaurantRegisterResponse)
   async activateRestaurant(
-    @Args('activationDto') activationDto: ActivationDto,
+    @Args('activationDto') activationDto: RestaurantActivationDto,
     @Context() context: { res: Response },
-  ): Promise<ActivationResponse> {
+  ): Promise<RestaurantActivationResponse> {
     return this.restaurantService.activationRestaurant(
       activationDto,
       context.res,
@@ -41,24 +44,24 @@ export class RestaurantResolver {
   }
 
   // login restaurant
-  @Mutation(() => LoginResponse)
+  @Mutation(() => RestaurantActivationResponse)
   async LoginRestaurant(
     @Args('email') email: string,
     @Args('password') password: string,
-  ): Promise<LoginResponse> {
+  ): Promise<RestaurantLoginResponse> {
     return await this.restaurantService.LoginRestaurant({ email, password });
   }
 
   // get logged in restaurant
-  @Query(() => LoginResponse)
+  @Query(() => RestaurantLoginResponse)
   @UseGuards(AuthGuard)
   async getLoggedInRestaurant(
     @Context() context: { req: Response },
-  ): Promise<LoginResponse> {
+  ): Promise<RestaurantLoginResponse> {
     return await this.restaurantService.getLoggedInRestaurant(context.req);
   }
 
-  @Query(() => LogoutResponse)
+  @Query(() => RestaurantLogoutResponse)
   @UseGuards(AuthGuard)
   async logOutRestaurant(@Context() context: { req: Request }) {
     return await this.restaurantService.LogoutRestaurant(context.req);

@@ -3,11 +3,15 @@ import { JwtService } from '@nestjs/jwt';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from './email/email.service';
-import { ActivationDto, LoginDto, RegisterDto } from './dto/restaurant.dto';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
 import { TokenSender } from './utils/send.token';
 import { PrismaService } from '../prisma/prisma.service';
+import {
+  RestaurantActivationDto,
+  RestaurantLoginDto,
+  RestaurantRegisterDto,
+} from './dto/restaurant.dto';
 @Injectable()
 export class RestaurantsService {
   constructor(
@@ -18,7 +22,10 @@ export class RestaurantsService {
   ) {}
 
   // register restaurant
-  async registerRestaurant(registerDto: RegisterDto, response: Response) {
+  async registerRestaurant(
+    registerDto: RestaurantRegisterDto,
+    response: Response,
+  ) {
     const { name, country, city, address, email, phone_number, password } =
       registerDto;
     const isEmailExist = await this.prisma.restaurant.findUnique({
@@ -86,7 +93,10 @@ export class RestaurantsService {
   }
 
   // activation restaurant
-  async activationRestaurant(activationDto: ActivationDto, response: Response) {
+  async activationRestaurant(
+    activationDto: RestaurantActivationDto,
+    response: Response,
+  ) {
     const { activation_token } = activationDto;
 
     const newRestaurant: {
@@ -131,7 +141,7 @@ export class RestaurantsService {
   }
 
   //  Login restaurant
-  async LoginRestaurant(loginDto: LoginDto) {
+  async LoginRestaurant(loginDto: RestaurantLoginDto) {
     const { email, password } = loginDto;
 
     const restaurant = await this.prisma.restaurant.findUnique({
