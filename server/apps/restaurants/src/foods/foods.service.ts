@@ -1,10 +1,10 @@
-import { PrismaService } from '@/restaurants/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from '../email/email.service';
 import { CreateFoodDto } from './dto/foods.dto';
-import { Images } from '@prisma/client';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { PrismaService } from '@/restaurants/prisma/prisma.service';
+import { Images } from '@/restaurants/prisma/generated/client';
 
 @Injectable()
 export class FoodsService {

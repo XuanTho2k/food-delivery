@@ -1,0 +1,29 @@
+services:
+  users:
+    build:
+      context: .
+      dockerfile: ./apps/users/Dockerfile
+    command: npm run start users
+    env_file:
+      - ./apps/users/.env
+    ports:
+      - '4001:4001'
+  restaurants:
+    build:
+      context: .
+      dockerfile: ./apps/restaurants/Dockerfile
+    command: npm run start restaurants
+    env_file:
+      - ./apps/restaurants/.env
+    ports:
+      - '4000:4000'
+  gateway:
+    build:
+      context: .
+      dockerfile: ./apps/gateway/Dockerfile
+    command: npm run start
+    ports:
+      - '3000:3000'
+    depends_on:
+      - users
+      - restaurants

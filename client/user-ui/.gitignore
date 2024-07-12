@@ -10,10 +10,10 @@
 /coverage
 
 # env
-.env
+# .env
 
 # Docker
-Dockerfile
+# Dockerfile
 
 # next.js
 /.next/

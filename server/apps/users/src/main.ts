@@ -2,9 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { UsersModule } from './users.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { join, resolve } from 'path';
+import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
-import { config } from 'process';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(UsersModule);

@@ -1,6 +1,6 @@
+import { Restaurant } from '@/restaurants/prisma/generated/client';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Restaurant } from '@prisma/client';
 
 export class TokenSender {
   constructor(

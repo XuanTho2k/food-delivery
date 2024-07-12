@@ -1,13 +1,13 @@
 import { Restaurant } from './entities/restaurant.entities';
 import { JwtService } from '@nestjs/jwt';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from './email/email.service';
 import { ActivationDto, LoginDto, RegisterDto } from './dto/restaurant.dto';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
 import { TokenSender } from './utils/send.token';
+import { PrismaService } from '../prisma/prisma.service';
 @Injectable()
 export class RestaurantsService {
   constructor(
