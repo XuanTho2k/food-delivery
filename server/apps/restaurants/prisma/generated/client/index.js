@@ -184,6 +184,10 @@ const config = {
         "fromEnvVar": null,
         "value": "darwin-arm64",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "linux-arm64-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -209,8 +213,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client\"\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  Admin\n  User\n}\n\nmodel Avatars {\n  id        String @id @default(auto()) @map(\"_id\") @db.ObjectId\n  public_id String\n  url       String\n  user      User   @relation(fields: [userId], references: [id])\n  userId    String @unique @db.ObjectId\n}\n\nmodel User {\n  id           String    @id @default(auto()) @map(\"_id\") @db.ObjectId\n  name         String\n  email        String    @unique\n  phone_number Float?\n  address      String?\n  password     String\n  reviews      Reviews[]\n  role         Role      @default(User)\n  createdAt    DateTime  @default(now())\n  updatedAt    DateTime  @updatedAt\n  avatars      Avatars?\n}\n\nmodel Reviews {\n  id     String @id @default(auto()) @map(\"_id\") @db.ObjectId\n  review String\n  rating Float\n  userId String @db.ObjectId\n  user   User   @relation(fields: [userId], references: [id])\n  food   Foods  @relation(fields: [foodId], references: [id])\n  foodId String @db.ObjectId\n}\n\nmodel Foods {\n  id             String     @id @default(auto()) @map(\"_id\") @db.ObjectId\n  name           String\n  description    String\n  price          Int\n  estimatedPrice Int?\n  category       String\n  images         Images[]\n  restaurantId   String     @db.ObjectId\n  restaurant     Restaurant @relation(fields: [restaurantId], references: [id])\n  createdAt      DateTime   @default(now())\n  updatedAt      DateTime   @updatedAt\n  Reviews        Reviews[]\n}\n\nmodel Restaurant {\n  id           String   @id @default(auto()) @map(\"_id\") @db.ObjectId\n  name         String\n  country      String\n  city         String\n  address      String\n  email        String   @unique\n  phone_number Float    @unique\n  password     String\n  Foods        Foods[]\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n}\n\nmodel Images {\n  id        String @id @default(auto()) @map(\"_id\") @db.ObjectId\n  public_id String\n  url       String\n  foodId    String @db.ObjectId\n  food      Foods  @relation(fields: [foodId], references: [id])\n}\n",
-  "inlineSchemaHash": "25534ebc4aebd0c0fd32afdca32b289769c5983eb4b2d64b9ebde8983851d48b",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"./generated/client\"\n  binaryTargets = [\"native\", \"linux-arm64-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  Admin\n  User\n}\n\nmodel Avatars {\n  id        String @id @default(auto()) @map(\"_id\") @db.ObjectId\n  public_id String\n  url       String\n  user      User   @relation(fields: [userId], references: [id])\n  userId    String @unique @db.ObjectId\n}\n\nmodel User {\n  id           String    @id @default(auto()) @map(\"_id\") @db.ObjectId\n  name         String\n  email        String    @unique\n  phone_number Float?\n  address      String?\n  password     String\n  reviews      Reviews[]\n  role         Role      @default(User)\n  createdAt    DateTime  @default(now())\n  updatedAt    DateTime  @updatedAt\n  avatars      Avatars?\n}\n\nmodel Reviews {\n  id     String @id @default(auto()) @map(\"_id\") @db.ObjectId\n  review String\n  rating Float\n  userId String @db.ObjectId\n  user   User   @relation(fields: [userId], references: [id])\n  food   Foods  @relation(fields: [foodId], references: [id])\n  foodId String @db.ObjectId\n}\n\nmodel Foods {\n  id             String     @id @default(auto()) @map(\"_id\") @db.ObjectId\n  name           String\n  description    String\n  price          Int\n  estimatedPrice Int?\n  category       String\n  images         Images[]\n  restaurantId   String     @db.ObjectId\n  restaurant     Restaurant @relation(fields: [restaurantId], references: [id])\n  createdAt      DateTime   @default(now())\n  updatedAt      DateTime   @updatedAt\n  Reviews        Reviews[]\n}\n\nmodel Restaurant {\n  id           String   @id @default(auto()) @map(\"_id\") @db.ObjectId\n  name         String\n  country      String\n  city         String\n  address      String\n  email        String   @unique\n  phone_number Float    @unique\n  password     String\n  Foods        Foods[]\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n}\n\nmodel Images {\n  id        String @id @default(auto()) @map(\"_id\") @db.ObjectId\n  public_id String\n  url       String\n  foodId    String @db.ObjectId\n  food      Foods  @relation(fields: [foodId], references: [id])\n}\n",
+  "inlineSchemaHash": "04d057b576337cc590526f745ddc2578c3cc81d2e86ab6fa6cd2a286352fc95a",
   "copyEngine": true
 }
 
@@ -250,6 +254,10 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
 path.join(process.cwd(), "prisma/generated/client/libquery_engine-darwin-arm64.dylib.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-linux-arm64-openssl-3.0.x.so.node");
+path.join(process.cwd(), "prisma/generated/client/libquery_engine-linux-arm64-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "prisma/generated/client/schema.prisma")

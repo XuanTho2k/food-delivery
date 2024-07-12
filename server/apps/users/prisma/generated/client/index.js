@@ -140,6 +140,10 @@ const config = {
         "fromEnvVar": null,
         "value": "darwin-arm64",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "linux-arm64-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -147,8 +151,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../..",
   "clientVersion": "5.16.1",
@@ -157,6 +160,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mongodb",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -165,8 +169,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client\"\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  Admin\n  User\n}\n\nmodel Avatars {\n  id        String @id @default(auto()) @map(\"_id\") @db.ObjectId\n  public_id String\n  url       String\n  user      User   @relation(fields: [userId], references: [id])\n  userId    String @unique @db.ObjectId\n}\n\nmodel User {\n  id           String   @id @default(auto()) @map(\"_id\") @db.ObjectId\n  name         String\n  email        String   @unique\n  phone_number Float    @unique\n  address      String?\n  password     String\n  avatar       Avatars?\n  role         Role     @default(User)\n  createAt     DateTime @default(now())\n  updateAt     DateTime @updatedAt\n\n  // @@unique([email,phone_number], name: \"unique_email_phone_number\")\n}\n\n// model Restaurant {\n//   id String @id @default(auto()) @map(\"_id\") @db.ObjectId\n//   name String\n//   country String\n//   city String\n//   address String\n//   email String @unique\n//   phone_number Float @unique\n//   password String\n//   creatAt DateTime @default(now())\n//   updateAt DateTime @updatedAt\n// }\n",
-  "inlineSchemaHash": "c1fbe11978b9a8411f3091f7f2fef18c1ed4ec873dc55628af9bc06dffdac298",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"./generated/client\"\n  binaryTargets = [\"native\", \"linux-arm64-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  Admin\n  User\n}\n\nmodel Avatars {\n  id        String @id @default(auto()) @map(\"_id\") @db.ObjectId\n  public_id String\n  url       String\n  user      User   @relation(fields: [userId], references: [id])\n  userId    String @unique @db.ObjectId\n}\n\nmodel User {\n  id           String   @id @default(auto()) @map(\"_id\") @db.ObjectId\n  name         String\n  email        String   @unique\n  phone_number Float    @unique\n  address      String?\n  password     String\n  avatar       Avatars?\n  role         Role     @default(User)\n  createAt     DateTime @default(now())\n  updateAt     DateTime @updatedAt\n}\n",
+  "inlineSchemaHash": "1b076a3d45f2404527f6244e3eaddbb7f9eabdbcd383b2df69d0b8b4332e9d46",
   "copyEngine": true
 }
 
@@ -175,8 +179,8 @@ const fs = require('fs')
 config.dirname = __dirname
 if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
   const alternativePaths = [
-    "prisma/generated/client",
-    "generated/client",
+    "apps/users/prisma/generated/client",
+    "users/prisma/generated/client",
   ]
   
   const alternativePath = alternativePaths.find((altPath) => {
@@ -205,7 +209,11 @@ Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
-path.join(process.cwd(), "prisma/generated/client/libquery_engine-darwin-arm64.dylib.node")
+path.join(process.cwd(), "apps/users/prisma/generated/client/libquery_engine-darwin-arm64.dylib.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-linux-arm64-openssl-3.0.x.so.node");
+path.join(process.cwd(), "apps/users/prisma/generated/client/libquery_engine-linux-arm64-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "prisma/generated/client/schema.prisma")
+path.join(process.cwd(), "apps/users/prisma/generated/client/schema.prisma")

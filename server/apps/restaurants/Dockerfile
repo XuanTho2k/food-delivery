@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+RUN npx prisma generate --schema=./apps/restaurants/prisma/schema.prisma
+
 RUN npm run build
 
-CMD ["node", "dist/apps/restaurants/main"]
+# CMD ["node", "dist/apps/restaurants/main"]
