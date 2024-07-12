@@ -13,7 +13,7 @@ import { PrismaService } from '../prisma/Prisma.service';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from './email/email.service';
 import { TokenSender } from './utils/sendTokens';
-import { User } from '@prisma/client';
+import { User } from 'prisma/generated/client';
 
 interface UserData {
   name: string;
