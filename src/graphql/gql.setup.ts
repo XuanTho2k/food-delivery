@@ -6,7 +6,7 @@ import {
 } from "@apollo/client";
 import Cookies from "js-cookie";
 const httpLink = createHttpLink({
-  uri: "https://odyssey-lift-off-part5-server-production.up.railway.app/", // change this to YOUR server URI
+  uri: process.env.NEXT_PUBLIC_SERVER_URI,
 });
 
 const authMiddleWare = new ApolloLink((operation, forward) => {
