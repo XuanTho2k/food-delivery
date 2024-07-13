@@ -1,3 +1,4 @@
+import { PrismaService } from '@/carts/prisma/prisma.service';
 import {
   CanActivate,
   ExecutionContext,
@@ -7,7 +8,6 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../../prisma/Prisma.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
