@@ -14,6 +14,7 @@ import { RestaurantResolver } from './restaurants.resolver';
 import { FoodsService } from './foods/foods.service';
 import { CloudinaryService } from './cloudinary/cloudinary.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { FoodsResolver } from './foods/foods.resolver';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     RestaurantResolver,
     FoodsService,
     CloudinaryService,
+    FoodsResolver,
   ],
 })
 export class RestaurantsModule {}

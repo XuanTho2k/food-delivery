@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from '../email/email.service';
-import { CreateFoodDto } from './dto/foods.dto';
+import { CreateFoodDto, DeleteFoodDto } from './dto/foods.dto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { PrismaService } from '@/restaurants/prisma/prisma.service';
 import { Images } from '@/restaurants/prisma/generated/client';
@@ -63,5 +63,52 @@ export class FoodsService {
   //   get all restaurant foods
   async getLoggedInRestaurantFood(req: any, res: Response) {
     const restaurantId = req.restaurant?.id;
+
+    const foods = await this.prisma.foods.findMany({
+      where: {
+        restaurantId,
+      },
+      include: {
+        images: true,
+        restaurant: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return { foods };
+  }
+
+  // delete foods of a restaurant
+  async deleteFood(deleteFoodDto: DeleteFoodDto, req: any) {
+    const restaurantId = req.restaurant?.id;
+
+    const food = await this.prisma.foods.findUnique({
+      where: {
+        id: deleteFoodDto.id,
+      },
+      include: {
+        restaurant: true,
+        images: true,
+      },
+    });
+
+    if (food.restaurant.id !== restaurantId) {
+      throw Error('Only Restaurant owner can delete food!');
+    }
+
+    await this.prisma.images.deleteMany({
+      where: {
+        foodId: deleteFoodDto.id,
+      },
+    });
+
+    await this.prisma.foods.delete({
+      where: {
+        id: deleteFoodDto.id,
+      },
+    });
+
+    return { message: 'Food Deleted successfully!' };
   }
 }

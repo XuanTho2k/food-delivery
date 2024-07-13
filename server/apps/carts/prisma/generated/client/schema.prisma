@@ -1,0 +1,46 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "./generated/client"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Cart {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String     @unique
+  items       CartItem[]
+  totalItems  Int
+  totalPrices Int
+}
+
+model CartItem {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  cartId   String @unique @db.ObjectId
+  foodId   String @unique @db.ObjectId
+  quantity Int
+  food     Food   @relation(fields: [foodId], references: [id])
+  cart     Cart   @relation(fields: [cartId], references: [id])
+}
+
+model Food {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  price        Float
+  category     String
+  restaurantId String     @unique
+  images       Images[]
+  description  String
+  cartItems    CartItem[]
+}
+
+model Images {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  public_id String
+  url       String
+  foodId    String @unique @db.ObjectId
+  food      Food   @relation(fields: [foodId], references: [id])
+}

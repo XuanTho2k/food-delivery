@@ -22,7 +22,7 @@ export class LoggedInRestaurantReponse {
 }
 
 @ObjectType()
-export class DeleteFoodReponse {
+export class DeleteFoodResponse {
   @Field()
   message: string;
 

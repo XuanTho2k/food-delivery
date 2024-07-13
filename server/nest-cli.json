@@ -43,6 +43,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/restaurants/tsconfig.app.json"
       }
+    },
+    "carts": {
+      "type": "application",
+      "root": "apps/carts",
+      "entryFile": "main",
+      "sourceRoot": "apps/carts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/carts/tsconfig.app.json"
+      }
     }
   }
 }
